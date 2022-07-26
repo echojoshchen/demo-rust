@@ -1,0 +1,18 @@
+---
+version: "2"
+services:
+  build:
+    image: rust:1.62
+    working_dir: /app
+    volumes:
+      - .:/app
+    tmpfs:
+      - /app/target:exec
+    command: /bin/sh -c '
+      rustup component add clippy &&
+      rustup component add rustfmt &&
+      cargo fmt -- --check &&
+      cargo clippy -- -D warnings &&
+      cargo build &&
+      cargo run
+      '
